@@ -1,0 +1,197 @@
+from tkinter import *
+from PIL import ImageTk,Image
+import cv2
+import requests
+import json
+import numpy as np
+import pandas as pd
+import csv
+from sklearn import svm
+
+import mysql.connector
+def onClickSignUp():
+    def onClick():
+        print("!!")
+
+        class report:
+            def __init__(self,Pid, Name, Phone, Age, Gender, Address, Username, Password):
+                self.Pid = Pid
+                self.Name = Name
+                self.Phone = Phone
+                self.Age = Age
+                self.Gender = Gender
+                self.Address = Address
+                self.Username = Username
+                self.Password = Password
+
+        class DBHelper:
+            def savereportInDb(self, cRef):
+                sql = "insert into report values(null, '{}', '{}', {}, '{}','{}','{}','{}')".format(cRef.Pid,cRef.Name,
+                                                                                                    cRef.Phone,
+                                                                                                    cRef.Age,
+                                                                                                    cRef.Gender,
+                                                                                                    cRef.Address,
+                                                                                                    cRef.Username,
+                                                                                                    cRef.Password)
+                con = mysql.connector.connect(user='root', password="", host="127.0.0.1", database="patientdatabase")
+                cursor = con.cursor()
+                cursor.execute(sql)
+                con.commit()
+                print(">>Patient data saved")
+
+        Pid = entryPid.get()
+        Name = entryName.get()
+        Phone = entryPhone.get()
+        Age = entryAge.get()
+        Gender = entryGender.get()
+        Address = entryAddress.get()
+        Username = entryUsername.get()
+        Password = entryPassword.get()
+
+
+        cRef = report(Pid, Name, Phone, Age, Gender, Address, Username, Password)
+
+        dbhelper = DBHelper()
+        dbhelper.savereportInDb(cRef)
+
+    windowSup = Tk()
+    windowSup.configure(background='#88324f')
+    windowSup.geometry("600x600")
+
+
+    lblTitle = Label(windowSup,bg="black", text="Add Patient Details Below:",fg="white",height=2,width=30,font= "Verdana 10 underline")
+    lblTitle.pack()
+
+    lbl1 = Label(windowSup,text="Enter Pid:",width=15)
+    lbl1.place(relx=0.0, rely=0.1 )
+    entryPid = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryPid.place(relx=0.2, rely=0.1 )
+
+    lbl2 = Label(windowSup,text="Enter Patient Name:",width=15)
+    lbl2.place(relx=0.0, rely=0.2)
+    global entryName
+    entryName = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryName.place(relx=0.2, rely=0.2)
+
+    lbl3 = Label(windowSup,text="Enter Patient Phone:",width=15)
+    lbl3.place(relx=0.0, rely=0.3)
+    global entryPhone
+    entryPhone = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryPhone.place(relx=0.2, rely=0.3)
+
+    lbl4 = Label(windowSup,text="Enter Patient Age:",width=15)
+    lbl4.place(relx=0.0, rely=0.4)
+    global  entryAge
+    entryAge = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryAge.place(relx=0.2, rely=0.4)
+
+    lbl5 = Label(windowSup,text="Enter Gender:",width=15)
+    lbl5.place(relx=0.0, rely=0.5)
+    global entryGender
+    entryGender = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryGender.place(relx=0.2, rely=0.5)
+
+    lbl6 = Label(windowSup,text="Enter Patient Address:",width=15)
+    lbl6.place(relx=0.0, rely=0.6)
+    global entryAddress
+    entryAddress = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryAddress.place(relx=0.2, rely=0.6)
+
+    lbl7 = Label(windowSup,text="Enter Username:",width=15)
+    lbl7.place(relx=0.0, rely=0.7)
+    global entryUsername
+    entryUsername = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryUsername.place(relx=0.2, rely=0.7)
+
+    lbl8 = Label(windowSup,text="Enter Password:",width=15)
+    lbl8.place(relx=0.0, rely=0.8)
+    global entryPassword
+    entryPassword = Entry(windowSup) # Rectangular TextField where user will enter data
+    entryPassword.place(relx=0.2, rely=0.8)
+    button1 = Button(windowSup,text = "Add Record",bg="gray",fg="black",height=1,width=20,command=onClick)
+    button1.pack(side=BOTTOM,pady=10)
+    window.destroy()
+
+
+
+
+
+class report:
+    def __init__(self, Pid, Name, Phone, Age, Gender, Address, Username, Password):
+        self.Pid = Pid
+        self.Name = Name
+        self.Phone = Phone
+        self.Age = Age
+        self.Gender = Gender
+        self.Address = Address
+        self.Username = Username
+        self.Password = Password
+
+    def showPatient(self):
+        print("==", self.Pid, "|", self.Name, "==")
+        print("Name", self.Name)
+        print("Phone", self.Phone)
+        print("Age", self.Age)
+        print("Gender",self.Gender)
+        print("Address", self.Address)
+        print("Username",self.Username)
+        print("Password",self.Password)
+        print("==============")
+
+def fetchreportFromDB():
+    Username = entryUsername.get()
+    sql = "select * from report where Username ='{}' ".format(Username)
+    con = mysql.connector.connect(user="root", password="", host="127.0.0.1", database="patientdatabase")
+    cursor = con.cursor()
+    cursor.execute(sql)
+    row = cursor.fetchall()
+    print(row)
+    lab = Label(root1, text=row, width=30)
+    lab.place(relx=0.37, rely=0.7)
+
+
+def onClickLogin():
+    global root1
+    root1 = Tk()
+    root1.geometry("600x600+150+150")
+    root1.configure(background= '#88324f')
+    Title = Label(root1,bg="black", text="Welcom Report Login",fg="white",height=2,width=30,font= "Verdana 10 underline")
+    Title.pack(padx="10",pady="10")
+    root1.title("Login")
+    menu = Menu(root1)
+    root1.config(menu=menu)
+    lblUsername = Label(root1,fg="black",height=1,width=17, text="Username")
+    lblUsername.pack()
+    entryUsername = Entry(root1)
+    entryUsername.pack(padx="5",pady="5")
+    lblPassword = Label(root1, text="Password",fg="black",height=1,width=17)
+    lblPassword.pack()
+    entryPassword = Entry(root1)
+    entryPassword.pack(padx="5",pady="5")
+    btnLogin1 = Button(root1, text="Login",bg="gray",fg="black",height=1, width=20, command=fetchreportFromDB)
+
+    btnLogin1.pack(padx="10",pady="16")
+    window.destroy()
+
+global window
+window = Tk()
+window.title("Online Laboratory")
+window.geometry("600x600+150+150")
+window.configure(background= '#88324f')
+canvas = Canvas(window, width = 300 , height = 300)
+
+img = ImageTk.PhotoImage(Image.open("img.png"))
+canvas.create_image(150,150, image=img)
+canvas.pack(padx=10,pady=75)
+
+
+
+lblTitle = Label(window, text="WELCOME",fg="white",bg="black",height=2,width=30,font= "Verdana 10 underline")
+lblTitle.pack(side=TOP,padx=1,pady=10)
+
+btnSignUp = Button(window,text="Sign Up",bg="gray",fg="black",height=1,width=20,  command=onClickSignUp)
+btnSignUp.pack(side=BOTTOM,padx=1,pady=10)
+btnLogin = Button(window, text="Login ",bg="gray",fg="black",height=1,width=20,  command=onClickLogin)
+btnLogin.pack(side=BOTTOM,padx=1,pady=10)
+
+window.mainloop()
