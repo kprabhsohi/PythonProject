@@ -1,0 +1,45 @@
+from tkinter import*
+import requests
+import json
+
+def Onclick():
+    cityName= enterT1.get()
+    url = "https://openweathermap.org/data/2.5/weather?q={}&appid=b6907d289e10d714a6e88b30761fae22".format(cityName)
+    response = requests.get(url)
+    print(response.text)
+    data =json.loads(response.text)
+    lol=data["main"]["temp_min"]
+    lbl.config(text='temp_min' +str(lol))
+    lo=data["main"]["temp_max"]
+    lb1.config(text='temp_max' +str(lo))
+    l=data["main"]["humidity"]
+    lb2.config(text='humidity' +str(l))
+    ll=data["sys"]["sunrise"]
+    lb3.config(text='sunrise'+str(ll))
+    s=data["sys"]["sunset"]
+    lb4.config(text='sunset'+str(s))
+
+
+window = Tk()
+lblTitle = Label(window, text="Add Weather Details Below:")
+lblTitle.pack()
+lblcity= Label(window,text="cityName:")
+lblcity.pack()
+enterT1 = Entry(window)
+enterT1.pack()
+btnshowTemp =Button(window,text="temp",bg="blue",fg="white",command=Onclick)
+btnshowTemp.pack()
+lbl =Label(window)
+lbl.pack()
+lb1 =Label(window)
+lb1.pack()
+lb2 =Label(window)
+lb2.pack()
+lb3 =Label(window)
+lb3.pack()
+lb4 =Label(window)
+lb4.pack()
+
+window.mainloop()
+
+
