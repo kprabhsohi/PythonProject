@@ -1,0 +1,21 @@
+import csv
+import pandas as pd
+class blood:
+    def __init__(self,Month,Age,Blood_Sugar):
+     self.Month = Month
+     self.Age= Age
+     self.Blood_sugar = Blood_Sugar
+
+    def tempary(self):
+        return"{},{},{}\n".format(self.Month,self.Age,self.Blood_sugar)
+reply="yes"
+while reply=="yes":
+    Month=input("Enter Month:")
+    Age=input("Enter Age:")
+    Blood_suar=input("Enter thyroid:")
+    temp=blood(Month,Age,Blood_suar)
+
+    reply=input("add anoter record?")
+    file=open("T3.csv","a")
+    file.write(temp.tempary())
+file.close()
